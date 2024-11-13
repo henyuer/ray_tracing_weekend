@@ -4,11 +4,14 @@
 #include "sphere.h"
 #include "camera.h"
 #include "material.h"
+#include <chrono>
 
 using namespace std;
 
 int main()
 {
+    auto start = chrono::high_resolution_clock::now();
+
     hittable_list world;
     auto material_ground = make_shared<lambertian>(color(0.8, 0.8, 0.0));
     auto material_center = make_shared<lambertian>(color(0.1, 0.2, 0.5));
@@ -27,6 +30,10 @@ int main()
     cam.max_depth = 50;
 
     cam.render(world);
+
+    auto end = chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = end - start;
+    cerr << "Elapsed time: " << elapsed.count() << " s\n";
 
     return 0;
 }
