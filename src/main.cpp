@@ -14,12 +14,6 @@ int main()
 
     hittable_list world;
 
-<<<<<<< HEAD
-    world.add(make_shared<sphere>(point3(0, -100.5, -1), 100, material_ground));
-    world.add(make_shared<sphere>(point3(0, 0, -1.2), 0.5, material_center));
-    world.add(make_shared<sphere>(point3(-1, 0, -1), 0.5, material_left));
-    world.add(make_shared<sphere>(point3(1, 0.5, -1.5), 0.5, material_right));
-=======
     auto ground_material = make_shared<lambertian>(color(0.5, 0.5, 0.5));
     world.add(make_shared<sphere>(point3(0, -1000, 0), 1000, ground_material));
 
@@ -67,7 +61,6 @@ int main()
 
     auto material3 = make_shared<metal>(color(0.7, 0.6, 0.5), 0.0);
     world.add(make_shared<sphere>(point3(4, 1, 0), 1.0, material3));
->>>>>>> 390c5ceebfb068e512f0195e95a7b3aac0dc5e76
 
     camera cam;
 
