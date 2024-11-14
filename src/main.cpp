@@ -5,12 +5,15 @@
 #include "camera.h"
 #include "material.h"
 #include <chrono>
+#include <ctime>
 
 using namespace std;
 
 int main()
 {
     auto start = chrono::high_resolution_clock::now();
+
+    srand(time(NULL));
 
     hittable_list world;
 
@@ -28,14 +31,14 @@ int main()
             {
                 shared_ptr<material> sphere_material;
 
-                if (choose_mat < 0.8)
+                if (choose_mat < 0.5)
                 {
                     // diffuse
                     auto albedo = random_() * random_();
                     sphere_material = make_shared<lambertian>(albedo);
                     world.add(make_shared<sphere>(center, 0.2, sphere_material));
                 }
-                else if (choose_mat < 0.95)
+                else if (choose_mat < 0.7)
                 {
                     // metal
                     auto albedo = random_(0.5, 1);
@@ -43,11 +46,36 @@ int main()
                     sphere_material = make_shared<metal>(albedo, fuzz);
                     world.add(make_shared<sphere>(center, 0.2, sphere_material));
                 }
-                else
+                else if (choose_mat < 0.85)
                 {
                     // glass
                     sphere_material = make_shared<dielectric>(1.5);
                     world.add(make_shared<sphere>(center, 0.2, sphere_material));
+                }
+                // glass and bubble with different sizes
+                else if (choose_mat < 0.9)
+                {
+                    sphere_material = make_shared<dielectric>(1.5);
+                    shared_ptr<material> sphere_material2 = make_shared<dielectric>(1 / 1.5);
+                    world.add(make_shared<sphere>(center, 0.2, sphere_material));
+                    world.add(make_shared<sphere>(center, 0.18, sphere_material2));
+                }
+                // glass and bubble with different sizes
+                else if (choose_mat < 0.95)
+                {
+                    sphere_material = make_shared<dielectric>(1.5);
+                    shared_ptr<material> sphere_material2 = make_shared<dielectric>(1 / 1.5);
+                    world.add(make_shared<sphere>(center, 0.2, sphere_material));
+                    world.add(make_shared<sphere>(center, 0.15, sphere_material2));
+                }
+                // glass and bubble with different sizes
+                else
+                {
+                    // glass and bubble
+                    sphere_material = make_shared<dielectric>(1.5);
+                    shared_ptr<material> sphere_material2 = make_shared<dielectric>(1 / 1.5);
+                    world.add(make_shared<sphere>(center, 0.2, sphere_material));
+                    world.add(make_shared<sphere>(center, 0.1, sphere_material2));
                 }
             }
         }
@@ -65,16 +93,16 @@ int main()
     camera cam;
 
     cam.aspect_ratio = 16.0 / 9.0;
-    cam.image_width = 1200;
-    cam.samples_per_pixel = 500;
-    cam.max_depth = 50;
+    cam.image_width = 800;
+    cam.samples_per_pixel = 50;
+    cam.max_depth = 30;
 
     cam.vfov = 20;
     cam.lookfrom = point3(13, 2, 3);
     cam.lookat = point3(0, 0, 0);
     cam.vup = vec3(0, 1, 0);
 
-    cam.defocus_angle = 0.6;
+    cam.defocus_angle = 0;
     cam.focus_dist = 10.0;
 
     cam.render(world);

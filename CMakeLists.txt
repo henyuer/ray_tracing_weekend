@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 #设置编译选项
-add_compile_options(-Wall) #开启所有警告
+add_compile_options(-Wall -O3) 
 
 #查找所有源文件
 file(GLOB SOURCES "src/*.cpp")
