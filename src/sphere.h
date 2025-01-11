@@ -27,6 +27,22 @@ public:
         bbox = aabb(box1, box2);
     }
 
+    static void get_sphere_uv(const point3 &p, double &u, double &v)
+    {
+        // p: a given point on the sphere of radius one, centered at the origin.
+        // u: returned value [0,1] of angle around the Y axis from X=-1.
+        // v: returned value [0,1] of angle from Y=-1 to Y=+1.
+        //     <1 0 0> yields <0.50 0.50>       <-1  0  0> yields <0.00 0.50>
+        //     <0 1 0> yields <0.50 1.00>       < 0 -1  0> yields <0.50 0.00>
+        //     <0 0 1> yields <0.25 0.50>       < 0  0 -1> yields <0.75 0.50>
+
+        auto theta = std::acos(-p.y());
+        auto phi = std::atan2(-p.z(), p.x()) + pi;
+
+        u = phi / (2 * pi);
+        v = theta / pi;
+    }
+
     bool hit(const ray &r, interval ray_t, hit_record &rec) const override;
 
     aabb bounding_box() const override
@@ -67,6 +83,7 @@ bool sphere::hit(const ray &r, interval ray_t, hit_record &rec) const
     rec.p = r.at(rec.t);
     vec3 outward_normal = (rec.p - current_center) / radius;
     rec.set_face_normal(r, outward_normal);
+    get_sphere_uv(outward_normal, rec.u, rec.v);
     rec.mat_ptr = mat_ptr;
 
     return true;
