@@ -16,6 +16,11 @@ inline double degrees_to_radians(double degrees)
 {
     return degrees * pi / 180.0;
 }
+inline int random_int(int min, int max)
+{
+    // return a random integer in [min,max].
+    return min + rand() % (max - min + 1);
+}
 inline double random_double()
 {
     // returns a random real in [0,1).
@@ -34,6 +39,11 @@ public:
 
     interval() : min(infinity), max(-infinity) {};
     interval(double min, double max) : min(min), max(max) {};
+    interval(const interval &a, const interval &b)
+    {
+        min = (a.min <= b.min) ? a.min : b.min;
+        max = (a.max >= b.max) ? a.max : b.max;
+    }
 
     double size() const { return max - min; }
     bool contains(double x) const { return x >= min && x <= max; }
@@ -41,6 +51,11 @@ public:
     double clamp(double x) const { return x < min ? min : x > max ? max
                                                                   : x; }
 
+    interval expand(double delta) const
+    {
+        auto padding = delta / 2;
+        return interval(min - padding, max + padding);
+    }
     static const interval empty, universe;
 };
 
