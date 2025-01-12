@@ -18,6 +18,8 @@ include_directories(src)
 #添加可执行文件
 add_executable(demo ${SOURCES})
 
+ add_compile_options(-Wno-unused-but-set-variable)
+
 #链接外部库
 # target_link_libraries(${PROJECT_NAME} pthread)
 
